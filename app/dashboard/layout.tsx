@@ -1,5 +1,4 @@
-import * as React from "react";
-import PropTypes from "prop-types";
+"use client";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -20,13 +19,19 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Link from "next/link";
+import { useState } from "react";
 
 const drawerWidth = 220;
 
-function ResponsiveDrawer(props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+export default function RootLayout({
+  children,
+  props,
+}: {
+  children: React.ReactNode;
+}) {
+  const { window } = props || {};
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -44,47 +49,44 @@ function ResponsiveDrawer(props) {
       <Toolbar />
       <Divider />
       <List>
-        <Link href="/dash/appartements">
+        <Link href="/dashboard/products">
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary={"Appartement"} sx={{ color: "black" }} />
+              <ListItemText primary={"Products"} sx={{ color: "black" }} />
             </ListItemButton>
           </ListItem>
         </Link>
-        <Link href="/dash/payments">
+        <Link href="/dashboard/categories">
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary={"payments"} sx={{ color: "black" }} />
+              <ListItemText primary={"Categories"} sx={{ color: "black" }} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link href="/dashboard/orders">
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Orders"} sx={{ color: "black" }} />
             </ListItemButton>
           </ListItem>
         </Link>
       </List>
       <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
     </div>
   );
 
   // Remove this const when copying and pasting into your project.
   const container =
     window !== undefined ? () => window().document.body : undefined;
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -182,19 +184,7 @@ function ResponsiveDrawer(props) {
           {drawer}
         </Drawer>
       </Box>
-      <div style={{ marginTop: "70px", width: "100%" }}>
-        <Outlet />
-      </div>
+      <div style={{ marginTop: "70px", width: "100%" }}>{children}</div>
     </Box>
   );
 }
-
-ResponsiveDrawer.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
-  window: PropTypes.func,
-};
-
-export default ResponsiveDrawer;
