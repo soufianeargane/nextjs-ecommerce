@@ -5,6 +5,8 @@ import { API_URL } from "../../../config";
 import axios from "axios";
 import pic from "@/public/avatar-20.jpg";
 import "../../../styles/app.css";
+import AddProduct from "@/components/addProduct";
+import Image from "next/image";
 
 export default function Page() {
   // const [products, setProducts] = useState<{ id: number; name: string }[]>([]);
@@ -20,19 +22,39 @@ export default function Page() {
       category: { name: string };
     }[]
   >([]);
+  const [inserted, setInserted] = useState(false);
 
   useEffect(() => {
     async function getProducts() {
-      await axios.get(API_URL + "/products").then((response) => {
-        setProducts(response.data);
-        console.log(response.data);
-      });
+      await axios
+        .get(API_URL + "/products", {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        })
+        .then((response) => {
+          setProducts(response.data);
+          console.log(response.data);
+        });
     }
     getProducts();
-  }, []);
+  }, [inserted]);
+
+  const handleDelete = async (id: number) => {
+    try {
+      let result = await axios.delete(API_URL + "/products/" + id);
+      console.log(result.data);
+      setInserted(!inserted);
+      alert(result.data.message);
+    } catch (error) {
+      console.log(error);
+      alert("error");
+    }
+  };
   return (
     <div className="px-6">
       <div>Products</div>
+      <AddProduct inserted={inserted} setInserted={setInserted} />
       <div className="card mt-3">
         <div className="is-scrollbar-hidden min-w-full overflow-x-auto">
           <table className="is-hoverable w-full text-left">
@@ -76,9 +98,12 @@ export default function Page() {
                   <td className="whitespace-nowrap px-3 py-3 sm:px-4">
                     <div className="flex items-center space-x-4">
                       <div className="avatar h-9 w-9">
-                        <img
+                        <Image
                           className="mask is-squircle"
-                          src={pic.src}
+                          // src={pic.src}
+                          width={40}
+                          height={40}
+                          src={product.image ? product.image : pic.src}
                           alt="avatar"
                         />
                       </div>
@@ -125,7 +150,7 @@ export default function Page() {
                       </button>
                       <button
                         className="px-2 py-1 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red"
-                        onClick={() => console.log("hiii")}
+                        onClick={() => handleDelete(product.id)}
                       >
                         Delete
                       </button>
