@@ -23,12 +23,12 @@ import Link from "next/link";
 
 const drawerWidth = 220;
 
-function ResponsiveDrawer(props) {
+function ResponsiveDrawer(props:any) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event:any) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
