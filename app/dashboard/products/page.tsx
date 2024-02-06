@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../../../config";
 import axios from "axios";
-import pic from "@/public/avatar-20.jpg";
+// import pic from "@/public/avatar-20.jpg";
 import "../../../styles/app.css";
 import AddProduct from "@/components/addProduct";
 import Image from "next/image";
@@ -103,7 +103,7 @@ export default function Page() {
                           // src={pic.src}
                           width={40}
                           height={40}
-                          src={product.image ? product.image : pic.src}
+                          src={product.image ? product.image : ""}
                           alt="avatar"
                         />
                       </div>
